@@ -4,13 +4,23 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import Image from "next/image";
 import { useEffect } from "react";
 
+const connection = new Connection("https://rpc.ankr.com/solana");
+
 export default function Home() {
   useEffect(() => {
     DLMM.create(
-      new Connection(''),
-      new PublicKey("HTvjzsfX3yU6BUodCjZ5vZkUrAxMDTrBs3CJaq43ashR")
-    ).then((dlmm) => {
+      connection,
+      new PublicKey("GZtYZzAK68WML4H7jxv7eSuV7884U7QbonCwNCTvrJQ7")
+    ).then(async (dlmm) => {
       console.log(dlmm);
+      dlmm
+        .getPositionsByUserAndLbPair(
+          new PublicKey("D2RA6neVCb9jPrZFowwmZYNfadrRDTmnro8SJ5aTQNyU")
+        )
+        .then(({ userPositions }) => {
+          console.log(userPositions?.[0]?.positionData.feeX.toString());
+          console.log(userPositions?.[0]?.positionData.feeY.toString());
+        });
     });
   }, []);
   return (
